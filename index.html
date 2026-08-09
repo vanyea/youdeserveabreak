@@ -787,7 +787,8 @@ button:hover {
 
       <label>
 
-        <input type="checkbox">
+        <input type="checkbox"
+          onchange="privilegeChecked(this)">
 
         May stare at the ceiling dramatically and call it “recovery.
 
@@ -796,7 +797,8 @@ button:hover {
 
       <label>
 
-        <input type="checkbox">
+        <input type="checkbox"
+          onchange="privilegeChecked(this)">
 
         May be babied without having to admit that he wants to be babied.
 
@@ -805,7 +807,8 @@ button:hover {
 
       <label>
 
-        <input type="checkbox">
+        <input type="checkbox"
+          onchange="privilegeChecked(this)">
 
         May send a single 🥺 emoji as a distress signal. Girlfriend must investigate.
 
@@ -814,7 +817,8 @@ button:hover {
 
       <label>
 
-        <input type="checkbox">
+        <input type="checkbox"
+          onchange="privilegeChecked(this)">
 
         Unlimited reminders that someone is ridiculously proud of him.
 
@@ -823,7 +827,8 @@ button:hover {
 
       <label>
 
-        <input type="checkbox">
+        <input type="checkbox"
+          onchange="privilegeChecked(this)">
 
         One rant may be delivered at maximum volume.
 
@@ -832,7 +837,8 @@ button:hover {
 
       <label>
 
-        <input type="checkbox">
+        <input type="checkbox"
+          onchange="privilegeChecked(this)">
 
         🍰 One irrational little treat is automatically justified.
 
@@ -967,7 +973,44 @@ function sendChoice(choice) {
   });
 
 }
+function privilegeChecked(checkbox) {
 
+  // Only record it when he checks the box.
+  // Unchecking it won't create another entry.
+  if (!checkbox.checked) {
+    return;
+  }
+
+  const privilege =
+    checkbox.parentElement.innerText.trim();
+
+  fetch(BACKEND_URL, {
+    method: "POST",
+
+    mode: "no-cors",
+
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+
+    body: JSON.stringify({
+
+      choice: "✨ Boyfriend privilege",
+
+      extra: privilege
+
+    })
+
+  }).catch(function(error) {
+
+    console.log(
+      "Could not save privilege:",
+      error
+    );
+
+  });
+
+}
 
 /* =====================================================
    CARE PACKAGE
