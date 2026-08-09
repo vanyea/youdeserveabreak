@@ -155,9 +155,31 @@ function wakeUp(){
   document.querySelector('button').style.display='none';
   document.getElementById('content').classList.remove('hidden');
 }
+ async function sendChoice(choice) {
+  fetch("https://script.google.com/macros/s/AKfycbxaXYiw7WDjNfKSN1oT3eNvKzkjyvhYdhu5thFodVaqQajDtWqhnyBjZy4AeI2r43VCvg/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain"
+    },
+    body: JSON.stringify({
+      choice: choice
+    })
+  });
+}
 function showMsg(type){
+  const choiceNames = {
+    relax: "🛋️ Wanna relax?",
+    date: "🌙 Wanna date?",
+    chill: "🎬 Wanna just chill?",
+    massage: "💆 Need a massage?",
+    cuddle: "🫂 Need cuddles?",
+    treat: "🍰 Need a little treat?"
+  };
+
+  sendChoice(choiceNames[type]);
+
   const data={
-    relax:{
       text:"🛋️ Absolutely. Tonight is officially a no-pressure zone. Come over, get comfy, and let your brain be off-duty for a while.",
       icon:"🛋️", burst:["✨","💗","☁️","♡"]
     },
