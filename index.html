@@ -152,23 +152,23 @@
 
 <script>
 function wakeUp(){
-  document.querySelector('button').style.display='none';
+  document.querySelector('.card > button').style.display='none';
   document.getElementById('content').classList.remove('hidden');
 }
- async function sendChoice(choice) {
+function sendChoice(choice) {
   fetch("https://script.google.com/macros/s/AKfycbxaXYiw7WDjNfKSN1oT3eNvKzkjyvhYdhu5thFodVaqQajDtWqhnyBjZy4AeI2r43VCvg/exec", {
     method: "POST",
     mode: "no-cors",
     headers: {
-      "Content-Type": "text/plain"
+      "Content-Type": "text/plain;charset=utf-8"
     },
     body: JSON.stringify({
       choice: choice
     })
-  });
+  }).catch(() => {});
 }
 function showMsg(type){
-  const choiceNames = {
+   const choiceNames = {
     relax: "🛋️ Wanna relax?",
     date: "🌙 Wanna date?",
     chill: "🎬 Wanna just chill?",
