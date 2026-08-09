@@ -220,6 +220,161 @@ function showMsg(type){
   const clicked=[...document.querySelectorAll('.care-btn')].find(b=>b.getAttribute('onclick')?.includes(`'${type}'`));
   if(clicked){ clicked.classList.add('pop'); setTimeout(()=>clicked.classList.remove('pop'),600); }
 }
+ 
+</script>
+ <script>
+
+function wakeUp() {
+  document.querySelector('.card > button').style.display = 'none';
+  document.getElementById('content').classList.remove('hidden');
+}
+
+
+function sendChoice(choice) {
+  fetch("https://script.google.com/macros/s/AKfycbxaXYiw7WDjNfKSN1oT3eNvKzkjyvhYdhu5thFodVaqQajDtWqhnyBjZy4AeI2r43VCvg/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify({
+      choice: choice
+    })
+  }).catch(function(error) {
+    console.log("Choice could not be sent:", error);
+  });
+}
+
+
+function showMsg(type) {
+
+  // What gets recorded in your Google Sheet
+  const choiceNames = {
+    relax: "🛋️ Wanna relax?",
+    date: "🌙 Wanna date?",
+    chill: "🎬 Wanna just chill?",
+    massage: "💆 Need a massage?",
+    cuddle: "🫂 Need cuddles?",
+    treat: "🍰 Need a little treat?"
+  };
+
+  // Send his choice to Google Sheets
+  sendChoice(choiceNames[type]);
+
+
+  // Messages + animations
+  const data = {
+
+    relax: {
+      text: "🛋️ Absolutely. Tonight is officially a no-pressure zone. Come over, get comfy, and let your brain be off-duty for a while.",
+      icon: "🛋️",
+      burst: ["✨", "💗", "☁️", "♡"]
+    },
+
+    date: {
+      text: "🌙 Date mode activated. No elaborate plans necessary — just you, me, food, and somewhere we can forget about everything for a bit.",
+      icon: "🌙",
+      burst: ["💗", "🌙", "✨", "🥰"]
+    },
+
+    chill: {
+      text: "🎬 Prescription: blanket + snacks + something stupid to watch + zero academic discussion. I will handle the entertainment.",
+      icon: "🎬",
+      burst: ["🍿", "✨", "🎬", "♡"]
+    },
+
+    massage: {
+      text: "💆 Booked. You bring the tired shoulders, I bring the massage. Terms and conditions: you are not allowed to complain about being spoiled.",
+      icon: "💆",
+      burst: ["💗", "✨", "🫶", "♡"]
+    },
+
+    cuddle: {
+      text: "🫂 Cuddle request received. Estimated delivery: as soon as humanly possible. Side effect: you may not want to leave.",
+      icon: "🫂",
+      burst: ["💗", "🫂", "♡", "✨"]
+    },
+
+    treat: {
+      text: "🍰 You deserve a tiny reward for surviving the week. Pick something unnecessarily delicious. This is doctor-approved.",
+      icon: "🍰",
+      burst: ["🍰", "💗", "✨", "🍓"]
+    }
+
+  };
+
+
+  const d = data[type];
+
+
+  // Create the little floating animation
+  const positions = [
+    [-85, -25, -20],
+    [-35, -55, 15],
+    [45, -45, -10],
+    [85, -10, 25]
+  ];
+
+  const effect = d.burst.map(function(emoji, i) {
+
+    const x = positions[i][0];
+    const y = positions[i][1];
+    const r = positions[i][2];
+
+    return `
+      <span
+        style="
+          --x:${x}px;
+          --y:${y}px;
+          --r:${r}deg;
+          animation-delay:${i * 0.08}s;
+        "
+      >${emoji}</span>
+    `;
+
+  }).join("");
+
+
+  document.getElementById('msg').innerHTML = `
+    <div class="message reveal">
+      ${d.text}
+    </div>
+
+    <div class="effect">
+      <span class="center">${d.icon}</span>
+      ${effect}
+    </div>
+  `;
+
+
+  // Make the button bounce
+  document.querySelectorAll('.care-btn').forEach(function(button) {
+    button.classList.remove('pop');
+  });
+
+
+  const clickedButton = Array.from(
+    document.querySelectorAll('.care-btn')
+  ).find(function(button) {
+
+    return button.getAttribute('onclick') &&
+           button.getAttribute('onclick').includes("'" + type + "'");
+
+  });
+
+
+  if (clickedButton) {
+
+    clickedButton.classList.add('pop');
+
+    setTimeout(function() {
+      clickedButton.classList.remove('pop');
+    }, 600);
+
+  }
+
+}
+
 </script>
 </body>
 </html>
